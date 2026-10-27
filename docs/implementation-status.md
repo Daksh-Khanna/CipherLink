@@ -1,6 +1,6 @@
 # CipherLink implementation status
 
-Last verified: 27 October 2026. This records implementation and testing, not an academic assessment report.
+Device checks: 27 October 2026. Source checks: 28 October 2026. This records implementation and testing, not an academic assessment report.
 
 ## Working application
 
@@ -12,7 +12,8 @@ Last verified: 27 October 2026. This records implementation and testing, not an 
 
 ## Completed verification
 
-- Latest automated run: **18 tests passed**. TypeScript checks passed for shared, server and mobile workspaces.
+- Latest automated run: **20 tests passed**. Formatting, TypeScript checks for all workspaces and the backend build passed.
+- Code quality improvements include consistent formatting, shared call-event types, guarded React contexts, centralized HTTP error handling and safe concurrent message retries. Regression tests reproduced the oversized-request and duplicate-insert failures before their fixes. A GitHub workflow is configured to run the checks; its first hosted execution is pending publication.
 - Backend tests cover authentication, authorization, encrypted delivery/history, duplicate IDs, tamper rejection, session revocation and call signaling. Identity-store tests cover address aliases and conflicting identities.
 - APK installation/runtime passed on a Galaxy S24 FE (Android 16), Galaxy A8+ (Android 9) and API 37 emulator.
 - Two physical phones exchanged messages in both directions. The user confirmed video and audio work on both phones.

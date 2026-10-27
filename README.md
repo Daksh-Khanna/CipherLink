@@ -2,11 +2,11 @@
 
 An Android communication app for the VIT Computer Networks group project, **Secure Mobile Communication App**.
 
-| Student | Registration |
-| --- | --- |
-| Daksh Khanna | 24BYB0125 |
-| Harjot Singh Bagga | 24BYB0115 |
-| Tanuj Sharma | 24BYB0122 |
+| Student            | Registration |
+| ------------------ | ------------ |
+| Daksh Khanna       | 24BYB0125    |
+| Harjot Singh Bagga | 24BYB0115    |
+| Tanuj Sharma       | 24BYB0122    |
 
 Implemented: registration/login, user discovery, one-to-one encrypted text messaging, Socket.IO delivery, encrypted history, contact fingerprints, unread/read state, typing, and native WebRTC voice/video call flows with incoming-call acceptance/rejection and media controls. The dark graphite UI uses emerald accents and native navigation.
 
@@ -117,7 +117,10 @@ STUN alone is insufficient on many mobile/carrier or restricted networks. Media 
 
 ## Validation
 
+Run `npm run check` for formatting, TypeScript and automated tests. Run `npm run format` to apply the shared formatting rules. Generated files, private configuration and installation artifacts are excluded from formatting. The GitHub Code quality workflow runs these checks and builds the backend for pushes to `main` and pull requests.
+
 ```powershell
+npm run check
 npm test
 npm run typecheck
 npm run build:server
@@ -126,7 +129,7 @@ npm exec -w mobile -- expo-doctor
 npm run export:android -w mobile
 ```
 
-Tests use an isolated temporary SQLite database, real HTTP/WebSocket sockets and three independent accounts, then remove their test data. They verify encryption, tamper rejection, authentication, membership, real-time delivery, ciphertext persistence, duplicates, offline/reconnect history, session revocation and authorized call signaling. Signaling tests use synthetic SDP/ICE fixtures and do not prove live media. Restricted execution sandboxes may need network permission even for loopback.
+Tests use an isolated temporary SQLite database, real HTTP/WebSocket sockets and three independent accounts, then remove their test data. They verify encryption, tamper rejection, authentication, membership, real-time delivery, ciphertext persistence, concurrent retries and conflicting IDs, malformed/oversized request handling, offline/reconnect history, session revocation and authorized call signaling. Signaling tests use synthetic SDP/ICE fixtures and do not prove live media. Restricted execution sandboxes may need network permission even for loopback.
 
 ## Security limits and troubleshooting
 

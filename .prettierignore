@@ -1,0 +1,9 @@
+node_modules/
+artifacts/
+mobile/android/
+mobile/ios/
+mobile/.expo/
+**/dist/
+coverage/
+package-lock.json
+*.svg

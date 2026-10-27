@@ -1,1 +1,9 @@
-{"extends":"expo/tsconfig.base","compilerOptions":{"strict":true,"esModuleInterop":true,"resolvePackageJsonExports":false},"include":["**/*.ts","**/*.tsx","../shared/src"]}
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "strict": true,
+    "esModuleInterop": true,
+    "resolvePackageJsonExports": false
+  },
+  "include": ["**/*.ts", "**/*.tsx", "../shared/src"]
+}

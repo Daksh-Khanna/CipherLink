@@ -6,9 +6,114 @@ import { Avatar, Button, ErrorText, Field } from '../components/UI';
 import { errorMessage } from '../services/client';
 import { colors, styles } from '../theme';
 export function ProfileScreen() {
-  const { session, server, reconnectServer, logout } = useSession(); const [error, setError] = useState(''); const [busy, setBusy] = useState(false);
-  const [address, setAddress] = useState(server); const [connecting, setConnecting] = useState(false); const [connectionInfo, setConnectionInfo] = useState('');
-  const reconnect = async () => { setConnecting(true); setError(''); setConnectionInfo(''); try { await reconnectServer(address); setConnectionInfo('Server address verified. Your identity and contact trust were preserved.'); } catch (e) { setError(errorMessage(e)); } finally { setConnecting(false); } };
-  const signOut = async () => { setBusy(true); try { await logout(); } catch (e) { setError(errorMessage(e)); } finally { setBusy(false); } };
-  return <ScrollView style={styles.screen} contentContainerStyle={styles.content}><View style={{ alignItems: 'center', gap: 12, paddingVertical: 20 }}><Avatar name={session!.user.displayName} size={86} /><Text style={styles.title}>{session!.user.displayName}</Text><Text style={styles.subtitle}>@{session!.user.username}</Text></View><View style={styles.card}><Text style={styles.label}>YOUR IDENTITY</Text><Text style={styles.subtitle}>Compare your fingerprint through a trusted channel. Private keys stay in this device's secure storage.</Text><Text selectable style={{ color: colors.accent, lineHeight: 26, fontFamily: 'monospace', fontSize: 13 }}>{fingerprint(session!.user.publicKey)}</Text></View><View style={styles.card}><Text style={styles.label}>SERVER CONNECTION</Text><Text style={styles.subtitle}>Use a new network address for this same server. Your account and identity are verified before reconnecting.</Text><Field accessibilityLabel="New server address" value={address} onChangeText={setAddress} autoCorrect={false} keyboardType="url" placeholder="https://your-server.example.com" /><Button title="Connect to this address" loading={connecting} onPress={() => void reconnect()} />{connectionInfo ? <Text style={{ color: colors.accent }}>{connectionInfo}</Text> : null}<ErrorText text={error} /></View><View style={styles.card}><Text style={styles.label}>SECURITY & CONNECTION</Text><Text style={styles.subtitle}>Messages: Curve25519 + XSalsa20-Poly1305 authenticated encryption. Calls: WebRTC DTLS-SRTP.</Text><Text style={styles.subtitle}>CipherLink uses static identity keys and trust on first use. It has no forward secrecy or multi-device key sync. Uninstalling or clearing app data loses access to old messages.</Text><Text selectable style={{ ...styles.subtitle, fontSize: 12 }}>{server}</Text>{server.startsWith('http:') && <Text style={styles.error}>LAN development: login traffic uses unencrypted HTTP. Use HTTPS/WSS for secure deployment.</Text>}<Text style={styles.subtitle}>Calls require both apps in the foreground. Leaving the app ends an active call.</Text></View><View style={styles.card}><Text style={styles.label}>ABOUT CIPHERLINK</Text><Text style={styles.body}>Secure Mobile Communication App</Text><Text style={styles.subtitle}>Vellore Institute of Technology, Vellore{`\n`}Computer Networks course project</Text><Text style={styles.subtitle}>Daksh Khanna · 24BYB0125{`\n`}Harjot Singh Bagga · 24BYB0115{`\n`}Tanuj Sharma · 24BYB0122</Text></View><Button title="Log out" loading={busy} secondary onPress={() => void signOut()} /><Text style={{ ...styles.subtitle, textAlign: 'center', fontSize: 12 }}>Your encryption identity stays on this device after logout.</Text></ScrollView>;
+  const { session, server, reconnectServer, logout } = useSession();
+  const [error, setError] = useState('');
+  const [busy, setBusy] = useState(false);
+  const [address, setAddress] = useState(server);
+  const [connecting, setConnecting] = useState(false);
+  const [connectionInfo, setConnectionInfo] = useState('');
+  const reconnect = async () => {
+    setConnecting(true);
+    setError('');
+    setConnectionInfo('');
+    try {
+      await reconnectServer(address);
+      setConnectionInfo('Server address verified. Your identity and contact trust were preserved.');
+    } catch (e) {
+      setError(errorMessage(e));
+    } finally {
+      setConnecting(false);
+    }
+  };
+  const signOut = async () => {
+    setBusy(true);
+    try {
+      await logout();
+    } catch (e) {
+      setError(errorMessage(e));
+    } finally {
+      setBusy(false);
+    }
+  };
+  return (
+    <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
+      <View style={{ alignItems: 'center', gap: 12, paddingVertical: 20 }}>
+        <Avatar name={session!.user.displayName} size={86} />
+        <Text style={styles.title}>{session!.user.displayName}</Text>
+        <Text style={styles.subtitle}>@{session!.user.username}</Text>
+      </View>
+      <View style={styles.card}>
+        <Text style={styles.label}>YOUR IDENTITY</Text>
+        <Text style={styles.subtitle}>
+          Compare your fingerprint through a trusted channel. Private keys stay in this device's
+          secure storage.
+        </Text>
+        <Text
+          selectable
+          style={{ color: colors.accent, lineHeight: 26, fontFamily: 'monospace', fontSize: 13 }}
+        >
+          {fingerprint(session!.user.publicKey)}
+        </Text>
+      </View>
+      <View style={styles.card}>
+        <Text style={styles.label}>SERVER CONNECTION</Text>
+        <Text style={styles.subtitle}>
+          Use a new network address for this same server. Your account and identity are verified
+          before reconnecting.
+        </Text>
+        <Field
+          accessibilityLabel="New server address"
+          value={address}
+          onChangeText={setAddress}
+          autoCorrect={false}
+          keyboardType="url"
+          placeholder="https://your-server.example.com"
+        />
+        <Button
+          title="Connect to this address"
+          loading={connecting}
+          onPress={() => void reconnect()}
+        />
+        {connectionInfo ? <Text style={{ color: colors.accent }}>{connectionInfo}</Text> : null}
+        <ErrorText text={error} />
+      </View>
+      <View style={styles.card}>
+        <Text style={styles.label}>SECURITY & CONNECTION</Text>
+        <Text style={styles.subtitle}>
+          Messages: Curve25519 + XSalsa20-Poly1305 authenticated encryption. Calls: WebRTC
+          DTLS-SRTP.
+        </Text>
+        <Text style={styles.subtitle}>
+          CipherLink uses static identity keys and trust on first use. It has no forward secrecy or
+          multi-device key sync. Uninstalling or clearing app data loses access to old messages.
+        </Text>
+        <Text selectable style={{ ...styles.subtitle, fontSize: 12 }}>
+          {server}
+        </Text>
+        {server.startsWith('http:') && (
+          <Text style={styles.error}>
+            LAN development: login traffic uses unencrypted HTTP. Use HTTPS/WSS for secure
+            deployment.
+          </Text>
+        )}
+        <Text style={styles.subtitle}>
+          Calls require both apps in the foreground. Leaving the app ends an active call.
+        </Text>
+      </View>
+      <View style={styles.card}>
+        <Text style={styles.label}>ABOUT CIPHERLINK</Text>
+        <Text style={styles.body}>Secure Mobile Communication App</Text>
+        <Text style={styles.subtitle}>
+          Vellore Institute of Technology, Vellore{`\n`}Computer Networks course project
+        </Text>
+        <Text style={styles.subtitle}>
+          Daksh Khanna · 24BYB0125{`\n`}Harjot Singh Bagga · 24BYB0115{`\n`}Tanuj Sharma · 24BYB0122
+        </Text>
+      </View>
+      <Button title="Log out" loading={busy} secondary onPress={() => void signOut()} />
+      <Text style={{ ...styles.subtitle, textAlign: 'center', fontSize: 12 }}>
+        Your encryption identity stays on this device after logout.
+      </Text>
+    </ScrollView>
+  );
 }
