@@ -1,0 +1,62 @@
+generator client {
+  provider = "prisma-client-js"
+}
+datasource db {
+  provider = "sqlite"
+  url = env("DATABASE_URL")
+}
+model User {
+  id String @id @default(uuid())
+  username String @unique
+  displayName String
+  passwordHash String
+  createdAt DateTime @default(now())
+  key PublicEncryptionKey?
+  sessions Session[]
+  participants ConversationParticipant[]
+  messages Message[]
+}
+model PublicEncryptionKey {
+  userId String @id
+  publicKey String @unique
+  createdAt DateTime @default(now())
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+model Session {
+  id String @id @default(uuid())
+  userId String
+  expiresAt DateTime
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@index([userId])
+}
+model Conversation {
+  id String @id @default(uuid())
+  pairKey String @unique
+  createdAt DateTime @default(now())
+  participants ConversationParticipant[]
+  messages Message[]
+}
+model ConversationParticipant {
+  conversationId String
+  userId String
+  readAt DateTime @default(now())
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@id([conversationId, userId])
+  @@index([userId])
+}
+model Message {
+  id String @id
+  conversationId String
+  senderId String
+  ciphertext String
+  nonce String
+  algorithm String
+  senderKey String
+  recipientKey String
+  createdAt DateTime @default(now())
+  deliveredAt DateTime?
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  sender User @relation(fields: [senderId], references: [id])
+  @@index([conversationId, createdAt, id])
+}

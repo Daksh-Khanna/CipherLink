@@ -1,0 +1,14 @@
+{
+  "name": "cipherlink", "version": "1.0.0", "private": true,
+  "workspaces": ["server", "mobile", "shared"],
+  "scripts": {
+    "dev:server": "npm run dev -w server --", "dev:mobile": "npm run start -w mobile --",
+    "db:setup": "npm run db:setup -w server", "test": "npm run test -w server",
+    "typecheck": "npm run typecheck -w shared && npm run typecheck -w server && npm run typecheck -w mobile",
+    "build:server": "npm run build -w server", "android": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/run-android.ps1",
+    "setup:env": "node scripts/setup-env.mjs",
+    "start:server": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/start-public-server.ps1",
+    "start:tunnel": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/start-mobile-data-tunnel.ps1"
+  }, "engines": { "node": ">=22.13.0" },
+  "overrides": { "@prisma/config": { "deepmerge-ts": "^8.0.2" }, "react-native-safe-area-context": "~5.7.0", "react-native-screens": "~4.26.0", "expo": "~57.0.9", "expo-font": "~57.0.4", "react": "19.2.3", "react-native": "0.86.3" }
+}
